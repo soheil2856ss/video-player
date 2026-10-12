@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="./8400849-middle.png">
+</head>
+<body>
+<div class="video-container">
+    <div class="box-video">
+        <video id="myVideo" src="./BigBuckBunny_320x180.mp4" preload="metadata"></video>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <button class="center-play-btn" id="centerPlayBtn" aria-label="Play">
+            <i data-lucide="play"></i>
+        </button>
+        <div class="controls">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-filled" id="progressFilled">
+                    <div class="progress-filled-point"></div>
+                </div>
+                <div class="timeline-preview" id="timelinePreview">
+                    <canvas id="previewCanvas" width="160" height="90"></canvas>
+                    <span id="previewTime">0:00</span>
+                </div>
+            </div>
+        </div>
+        <video id="previewVideo" src="./BigBuckBunny_320x180.mp4" muted preload="metadata" style="display:none"></video>
+    </div>
+    <div class="All-controls">
+        <div class="controls-left">
+            <button id="playPauseBtn"><i data-lucide="play"></i></button>
+            <button id="rewindBtn"><i data-lucide="rewind"></i></button>
+            <button id="forwardBtn"><i data-lucide="fast-forward"></i></button>
+        </div>
+        <div class="controls-right">
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+            <button id="muteBtn"><i data-lucide="volume-2"></i></button>
+            <select id="speedSelect">
+                <option value="0.5">x0.5</option>
+                <option value="1.0" selected>x1.0</option>
+                <option value="1.5">x1.5</option>
+                <option value="2.0">x2.0</option>
+            </select>
+            <div class="Time"><span id="currentTime">0:00</span> / <span id="duration">0:00</span></div>
+            <button id="pipBtn"><i data-lucide="picture-in-picture-2"></i></button>
+            <button id="fullscreenBtn"><i data-lucide="maximize"></i></button>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+    lucide.createIcons();
+</script>
+<script src="./script.js"></script>
+</body>
+</html>

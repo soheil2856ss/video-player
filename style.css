@@ -1,0 +1,613 @@
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: dark;
+    --accent: #38bdf8;
+    --accent-hover: #7dd3fc;
+    --panel: #111827;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+}
+
+/* ---------- Page ---------- */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 20px;
+    font-family: Inter, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+            radial-gradient(ellipse at 50% 0%, #24364f 0%, transparent 55%),
+            #080c14;
+}
+
+.video-container {
+    width: min(100%, 1000px);
+    padding: 12px;
+    border: 1px solid rgb(148 163 184 / 15%);
+    border-radius: 24px;
+    background: rgb(17 24 39 / 85%);
+    box-shadow:
+            0 30px 80px rgb(0 0 0 / 45%),
+            0 0 35px rgb(56 189 248 / 5%);
+}
+
+/* ---------- Video ---------- */
+.box-video {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #000;
+    isolation: isolate;
+}
+
+#myVideo {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    object-fit: contain;
+}
+
+/* ---------- Loading Spinner ---------- */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: 46px;
+    height: 46px;
+    margin: -23px 0 0 -23px;
+    border: 4px solid rgb(148 163 184 / 25%);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+    animation: spin 800ms linear infinite;
+}
+
+.loading-spinner.show {
+    opacity: 1;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Center Play/Pause Button ---------- */
+.center-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    border: 1px solid rgb(148 163 184 / 20%);
+    border-radius: 50%;
+    color: var(--text);
+    background: rgb(17 24 39 / 70%);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(.9);
+    transition: opacity 180ms ease, transform 180ms ease, background 180ms ease;
+    pointer-events: none;
+}
+
+.box-video.paused .center-play-btn {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.center-play-btn:hover {
+    color: white;
+    background: rgb(17 24 39 / 90%);
+}
+
+.center-play-btn svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2;
+}
+
+/* ---------- Overlay & Timeline ---------- */
+.controls {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px 16px 14px;
+    cursor: pointer;
+    background: linear-gradient(
+            to bottom,
+            transparent 60%,
+            rgb(0 0 0 / 65%) 100%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+}
+
+.box-video.show-controls .controls,
+.box-video:focus-within .controls {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: 5px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 35%);
+    cursor: pointer;
+    touch-action: none;
+    transition: height 150ms ease;
+}
+
+.progress-bar:hover {
+    height: 8px;
+}
+
+.progress-filled {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: inherit;
+    background: var(--accent);
+    pointer-events: none;
+}
+
+.progress-filled-point {
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    margin-right: -6.5px;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px rgb(56 189 248 / 55%);
+    pointer-events: none;
+}
+
+/* ---------- Timeline Thumbnail Preview ---------- */
+.timeline-preview {
+    position: absolute;
+    bottom: 22px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid rgb(148 163 184 / 20%);
+    border-radius: 10px;
+    background: var(--panel);
+    box-shadow:
+            0 14px 34px rgb(0 0 0 / 50%),
+            0 0 20px rgb(56 189 248 / 8%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 0) scale(.96);
+    transition: opacity 150ms ease, transform 150ms ease;
+    z-index: 3;
+}
+
+.timeline-preview.show {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+}
+
+#previewCanvas {
+    display: block;
+    width: 160px;
+    height: 90px;
+    border-radius: 6px;
+    background: #000;
+    outline: 1px solid rgb(56 189 248 / 25%);
+}
+
+#previewTime {
+    color: var(--muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Control Bar ---------- */
+.All-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    min-height: 66px;
+    padding: 12px 10px 2px;
+}
+
+.controls-left,
+.controls-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.controls-right {
+    flex-wrap: wrap;
+}
+
+button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    transition:
+            background 180ms ease,
+            color 180ms ease,
+            transform 180ms ease;
+}
+
+button:hover {
+    color: var(--accent-hover);
+    background: rgb(148 163 184 / 12%);
+}
+
+button:active {
+    transform: scale(.94);
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+#playPauseBtn {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    background: #164e63;
+}
+
+#playPauseBtn:hover {
+    color: white;
+    background: #0369a1;
+}
+
+button svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+/* ---------- Volume ---------- */
+#volumeSlider {
+    width: 100px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* ---------- Playback Speed ---------- */
+#speedSelect {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgb(148 163 184 / 20%);
+    border-radius: 12px;
+    color: var(--text);
+    background: #1e293b;
+    cursor: pointer;
+}
+
+#speedSelect option {
+    color: var(--text);
+    background: #111827;
+}
+
+/* ---------- Time ---------- */
+.Time {
+    color: var(--muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+#currentTime {
+    color: var(--text);
+}
+
+/* ---------- Fullscreen ---------- */
+.video-container:fullscreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    padding: 20px;
+    border: none;
+    border-radius: 0;
+    background: #080c14;
+}
+
+.video-container:fullscreen .box-video {
+    flex: 1;
+    min-height: 0;
+}
+
+.video-container:fullscreen #myVideo {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablet */
+@media (max-width: 900px) {
+    body {
+        padding: 20px 14px;
+    }
+
+    .video-container {
+        padding: 10px;
+    }
+
+    .All-controls {
+        gap: 10px;
+        padding: 10px 8px 2px;
+    }
+
+    #volumeSlider {
+        width: 80px;
+    }
+}
+
+/* Touch devices: hover preview isn't usable without a mouse, and a finger
+   covers the exact spot it would appear over, so skip it entirely. */
+@media (hover: none) {
+    .timeline-preview {
+        display: none;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    #previewCanvas {
+        width: 110px;
+        height: 62px;
+    }
+
+    .video-container {
+        padding: 7px;
+        border-radius: 16px;
+    }
+
+    .box-video {
+        border-radius: 11px;
+    }
+
+    .center-play-btn {
+        width: 52px;
+        height: 52px;
+        margin: -26px 0 0 -26px;
+    }
+
+    .center-play-btn svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .loading-spinner {
+        width: 36px;
+        height: 36px;
+        margin: -18px 0 0 -18px;
+        border-width: 3px;
+    }
+
+    .All-controls {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 5px 4px;
+    }
+
+    .controls-left,
+    .controls-right {
+        gap: 5px;
+    }
+
+    .controls-right {
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    #volumeSlider {
+        width: 65px;
+    }
+
+    button {
+        min-width: 34px;
+        min-height: 34px;
+        padding: 7px;
+    }
+
+    .Time {
+        font-size: 11px;
+    }
+
+    #speedSelect {
+        min-height: 34px;
+        padding: 0 6px;
+        font-size: 12px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+    body {
+        padding: 8px;
+    }
+
+    .video-container {
+        padding: 5px;
+        border-radius: 12px;
+    }
+
+    .All-controls {
+        gap: 6px;
+        padding: 8px 3px 2px;
+    }
+
+    .controls-left,
+    .controls-right {
+        gap: 3px;
+    }
+
+    #volumeSlider {
+        width: 46px;
+    }
+
+    #speedSelect {
+        min-height: 30px;
+        padding: 0 4px;
+        font-size: 11px;
+    }
+
+    button {
+        min-width: 30px;
+        min-height: 30px;
+        padding: 5px;
+    }
+
+    #playPauseBtn {
+        min-width: 38px;
+        min-height: 38px;
+    }
+
+    .Time {
+        font-size: 10px;
+    }
+
+    .center-play-btn {
+        width: 44px;
+        height: 44px;
+        margin: -22px 0 0 -22px;
+    }
+}
+
+/* Very small phones — trim further and lay the bar out in two clean,
+   centered rows instead of letting items wrap wherever they fit. */
+@media (max-width: 340px) {
+    body {
+        padding: 6px;
+    }
+
+    .video-container {
+        padding: 4px;
+        border-radius: 10px;
+    }
+
+    .box-video {
+        border-radius: 9px;
+    }
+
+    .All-controls {
+        justify-content: center;
+        gap: 4px;
+        padding: 7px 2px 2px;
+    }
+
+    .controls-left,
+    .controls-right {
+        justify-content: center;
+        gap: 2px;
+    }
+
+    .controls-right {
+        flex: 1 0 100%;
+    }
+
+    /* The slider is the single biggest space hog — drop it and keep
+       just the mute toggle so everything else has room to breathe. */
+    #volumeSlider {
+        display: none;
+    }
+
+    #speedSelect {
+        min-height: 28px;
+        padding: 0 3px;
+        font-size: 10px;
+    }
+
+    button {
+        min-width: 28px;
+        min-height: 28px;
+        padding: 4px;
+    }
+
+    #playPauseBtn {
+        min-width: 34px;
+        min-height: 34px;
+    }
+
+    button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .Time {
+        font-size: 9px;
+    }
+
+    .center-play-btn {
+        width: 38px;
+        height: 38px;
+        margin: -19px 0 0 -19px;
+    }
+
+    .center-play-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .loading-spinner {
+        width: 30px;
+        height: 30px;
+        margin: -15px 0 0 -15px;
+        border-width: 3px;
+    }
+}

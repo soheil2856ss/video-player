@@ -1,79 +1,86 @@
 # Custom Video Player
 
-A fully custom HTML5 video player built from scratch with vanilla JavaScript — no frameworks, no video-player libraries. Styled with a dark, modern theme and built to feel close to a production player (YouTube/Netflix-style interactions), with real touch support for mobile.
+A fully custom HTML5 video player built from scratch with vanilla JavaScript — no frameworks, no video-player libraries. Dark, modern theme with YouTube-style interactions and real touch support.
+
+You pick a video from your own computer, and it plays right in the browser. **The file is never uploaded anywhere** — it's read locally through `URL.createObjectURL`.
 
 ![status](https://img.shields.io/badge/status-complete-success)
 ![vanilla js](https://img.shields.io/badge/javascript-vanilla-yellow)
-![no dependencies](https://img.shields.io/badge/dependencies-none-blue)
+![no build step](https://img.shields.io/badge/build-none-blue)
 
 ## Features
 
-- **Play / Pause** — toolbar button, a big center overlay button (visible only while paused, hidden/un-clickable the rest of the time), `Space` shortcut, or click anywhere in the video
-- **Rewind / Forward** — jump ±10s (buttons) or ±5s (arrow keys)
-- **Seekable progress bar** — click to jump, or click/touch-and-drag to scrub smoothly. Built on Pointer Events, so the same code handles mouse, touch, and pen. The visual bar updates instantly on every move while the actual video seek is throttled to one per animation frame, so dragging stays smooth even on longer videos
-- **Timeline thumbnail preview** — hover the progress bar (pointer devices only) to see a live frame preview and timestamp before you seek, rendered via a hidden `<video>` + `<canvas>`. Automatically hidden on touch devices, where hover doesn't apply
-- **Volume control** — slider + mute toggle, with the icon reflecting muted / low / high volume (slider is dropped on very small screens in favor of just the mute toggle)
-- **Playback speed** — 0.5x to 2x
-- **Fullscreen** toggle
-- **Picture-in-Picture** toggle (auto-disabled in browsers that don't support the API)
-- **Auto-hiding controls** — controls fade in on mouse movement or tap, and fade out after a few seconds of inactivity, debounced so they don't flicker
-- **Loading spinner** — appears automatically while the video buffers (`waiting` event), and is layered so it never blocks or gets confused with the center play button
-- **Keyboard shortcuts** — see table below
-- **Fully responsive** — four layout tiers (desktop, tablet, mobile, and very small phones), with controls re-flowing into clean rows rather than wrapping awkwardly
+- **Local file picker** — a start screen (Persian, RTL) with a styled button that opens the native file dialog; accepts any format your browser can decode (MP4, WebM, …)
+- **Play / Pause** — toolbar button, a big center button (visible only while paused), or the `Space` key
+- **Rewind / Forward** — ±10s with the buttons, ±5s with the arrow keys
+- **Seekable progress bar** — click to jump, or drag to scrub. Built on Pointer Events, so one code path handles mouse, touch and pen. The bar updates instantly on every move while the real seek is throttled to one per animation frame, so dragging stays smooth
+- **Timeline thumbnail preview** — hover the progress bar to see a frame and timestamp before you seek (a hidden `<video>` drawn onto a `<canvas>`). Hidden on touch devices, where hover doesn't exist
+- **Volume** — slider + mute toggle; the icon reflects muted / low / high
+- **Playback speed** — 0.5x, 1x, 1.5x, 2x
+- **Fullscreen** and **Picture-in-Picture** (the PiP button is disabled automatically where the browser doesn't support it)
+- **Auto-hiding controls** — fade in on mouse move or tap, fade out after 3 seconds of inactivity
+- **Loading spinner** — shown while the video buffers
+- **Keyboard shortcuts** — see below
+- **Responsive by design** — the control bar scales continuously with the player's width, so nothing breaks at any size, even mid-resize or in fullscreen
 
 ## Keyboard Shortcuts
 
-| Key           | Action          |
-|---------------|-----------------|
-| `Space`       | Play / Pause    |
-| `→`           | Forward 5s      |
-| `←`           | Rewind 5s       |
-| `M`           | Mute / Unmute   |
-| `F`           | Toggle fullscreen |
+| Key     | Action             |
+|---------|--------------------|
+| `Space` | Play / Pause       |
+| `→`     | Forward 5s         |
+| `←`     | Rewind 5s          |
+| `M`     | Mute / Unmute      |
+| `F`     | Toggle fullscreen  |
 
-Shortcuts are automatically disabled while focus is inside an `<input>` or `<select>` (e.g. the volume slider or speed selector) to avoid conflicting with their native behavior.
+Shortcuts are ignored while focus is inside an `<input>`, `<select>` or `<textarea>` (for example the volume slider), so they don't fight with native behavior.
+
+## Getting Started
+
+No build step and no dependencies to install.
+
+```bash
+git clone https://github.com/soheil2856ss/video-player.git
+cd video-player
+```
+
+Then open `index.html` in a browser (or serve the folder with any static server, e.g. `npx serve`), click the button, and choose a video file.
+
+> The icons come from a CDN, so you need an internet connection the first time. To work fully offline, download `lucide.js` into the project and point the `<script>` tag in `index.html` at it.
 
 ## Project Structure
 
 ```
 .
-├── index.html   # Markup
-├── style.css    # Theme, layout, animations, responsive breakpoints
-├── script.js    # Player logic
+├── index.html     # Markup (start screen + player)
+├── style.css      # Theme, layout, responsive rules
+├── script.js      # Player logic
+├── fonts/         # Vazirmatn (start-screen font)
+├── .gitignore
 └── README.md
 ```
 
+## How the responsive layout works
+
+Instead of a long list of viewport breakpoints, the player is a **CSS container** (`container-type: inline-size`). Sizes inside it are defined with `clamp()` and `cqw` (1% of the *player's* width), so buttons, icons, gaps, fonts and the volume-slider thumb shrink and grow smoothly together.
+
+- If the control bar runs out of room, the right-hand group simply wraps onto its own row — it never overflows or overlaps
+- On very narrow players (≤ 340px) the volume slider is hidden and only the mute button stays
+- Because it reacts to the player's width and not the screen's, the same layout holds in fullscreen and inside any parent
+- The video area reserves a 16:9 box before a file is loaded, so the layout doesn't jump when the video appears
+
 ## Tech Stack
 
-- Plain HTML5 `<video>` element — no video.js, Plyr, or similar
-- Vanilla JavaScript (no framework, no build step)
-- Pointer Events API for unified mouse/touch/pen interaction
-- Canvas API for the timeline thumbnail preview
-- CSS custom properties for theming
-- [Lucide](https://lucide.dev/) for icons (loaded via CDN)
-
-## Getting Started
-
-No build step required.
-
-1. Clone the repo
-2. Replace `54_hostlistener.mp4` with your own video file (or update the `src` in `index.html`)
-3. Open `index.html` in a browser (or serve it with any static server, e.g. `npx serve`)
-
-## Responsive Breakpoints
-
-| Breakpoint | Target           | Notes |
-|------------|------------------|-------|
-| default    | Desktop / laptop | Full layout |
-| `≤900px`   | Tablet           | Tighter spacing, smaller volume slider |
-| `≤600px`   | Mobile           | Controls wrap, smaller buttons/icons, thumbnail preview hidden on touch |
-| `≤380px`   | Small phones     | Further size reduction across the board |
-| `≤340px`   | Very small phones | Volume slider hidden (mute toggle only), control bar forced into two centered rows |
+- HTML5 `<video>` element
+- Vanilla JavaScript — Pointer Events, Fullscreen API, Picture-in-Picture API, Canvas API, `URL.createObjectURL`
+- CSS — custom properties, container queries, `clamp()`
+- [Lucide](https://lucide.dev/) icons (CDN)
+- [Vazirmatn](https://github.com/rastikerdar/vazirmatn) font for the Persian start screen
 
 ## Browser Support
 
-Built on standard Web APIs (`HTMLMediaElement`, Fullscreen API, Picture-in-Picture API, Pointer Events). Works in all modern Chromium-, Firefox-, and Safari-based browsers, on both desktop and mobile. Picture-in-Picture support varies by browser — the button is automatically disabled where it isn't available.
+Any modern browser (Chrome, Edge, Firefox, Safari — desktop and mobile). Container queries need Chrome/Edge 105+, Firefox 110+ or Safari 16+. Picture-in-Picture support varies by browser. Which video formats play depends on the codecs your browser supports.
 
 ## Notes
 
-This project was built as a learning exercise to practice working directly with the HTML5 media API, DOM events (including Pointer Events for cross-device input), the Canvas API, and CSS-driven UI states — intentionally without a UI library, to understand how production video players handle timing, buffering, dragging, and responsive layout under the hood.
+Built as a learning project to practice the HTML5 media API, DOM and pointer events, the Canvas API and CSS-driven UI states — deliberately without a UI library, to understand how production players handle timing, buffering, dragging and responsive layout.

@@ -14,6 +14,7 @@
     --panel: #111827;
     --text: #f8fafc;
     --muted: #94a3b8;
+    --thumb: 10px;
 }
 
 @font-face {
@@ -31,9 +32,8 @@ body {
     padding: 32px 20px;
     font-family: Inter, "Segoe UI", sans-serif;
     color: var(--text);
-    background:
-            radial-gradient(ellipse at 50% 0%, #24364f 0%, transparent 55%),
-            #080c14;
+    background: radial-gradient(ellipse at 50% 0%, #24364f 0%, transparent 55%),
+    #080c14;
 }
 
 .video-container {
@@ -42,9 +42,8 @@ body {
     border: 1px solid rgb(148 163 184 / 15%);
     border-radius: 24px;
     background: rgb(17 24 39 / 85%);
-    box-shadow:
-            0 30px 80px rgb(0 0 0 / 45%),
-            0 0 35px rgb(56 189 248 / 5%);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 45%),
+    0 0 35px rgb(56 189 248 / 5%);
 }
 
 /* ---------- Video ---------- */
@@ -241,9 +240,8 @@ body {
     border: 1px solid rgb(148 163 184 / 20%);
     border-radius: 10px;
     background: var(--panel);
-    box-shadow:
-            0 14px 34px rgb(0 0 0 / 50%),
-            0 0 20px rgb(56 189 248 / 8%);
+    box-shadow: 0 14px 34px rgb(0 0 0 / 50%),
+    0 0 20px rgb(56 189 248 / 8%);
     opacity: 0;
     pointer-events: none;
     transform: translate(-50%, 0) scale(.96);
@@ -306,10 +304,9 @@ button {
     color: var(--text);
     background: transparent;
     cursor: pointer;
-    transition:
-            background 180ms ease,
-            color 180ms ease,
-            transform 180ms ease;
+    transition: background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 button:hover {
@@ -429,6 +426,22 @@ button svg {
     }
 }
 
+@media (max-width: 643px) {
+    .controls-right {
+        gap: 7px;
+    }
+}
+
+@media (max-width: 618px) {
+    .controls-left {
+        gap: 5px;
+    }
+
+    .controls-right {
+        gap: 5px;
+    }
+}
+
 /* Touch devices: hover preview isn't usable without a mouse, and a finger
    covers the exact spot it would appear over, so skip it entirely. */
 @media (hover: none) {
@@ -512,6 +525,180 @@ button svg {
     }
 }
 
+@media (max-width: 505px) {
+    .controls-right {
+        gap: 4px;
+    }
+}
+
+@media (max-width: 500px) {
+    .controls-right {
+        gap: 3px;
+    }
+}
+
+@media (max-width: 495px) {
+    .controls-right {
+        gap: 2px;
+    }
+}
+
+@media (max-width: 490px) {
+    .controls-right {
+        gap: 1px;
+    }
+}
+
+@media (max-width: 485px) {
+    #speedSelect {
+        font-size: 11px;
+        padding: 0 5px;
+    }
+}
+
+@media (max-width: 481px) {
+    .controls-right {
+        gap: 0;
+    }
+}
+
+@media (max-width: 476px) {
+    button svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    #playPauseBtn {
+        min-width: 43px;
+        min-height: 43px;
+    }
+}
+
+@media (max-width: 461px) {
+    #playPauseBtn {
+        min-width: 40px;
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 458px) {
+    #playPauseBtn {
+        min-width: 37px;
+        min-height: 37px;
+    }
+
+    button {
+        min-width: 32px;
+        min-height: 32px;
+        padding: 5px;
+    }
+}
+
+@media (max-width: 445px) {
+    button {
+        min-width: 30px;
+        min-height: 30px;
+        padding: 5px;
+    }
+}
+
+@media (max-width: 435px) {
+    button svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    button {
+        min-width: 28px;
+        min-height: 28px;
+        padding: 4px;
+    }
+}
+
+@media (max-width: 425px) {
+    button {
+        min-width: 26px;
+        min-height: 26px;
+        padding: 3px;
+    }
+}
+
+@media (max-width: 415px) {
+    button svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    #playPauseBtn {
+        min-width: 34px;
+        min-height: 34px;
+    }
+
+    .controls-left, .controls-right {
+        gap: 2px;
+    }
+
+    #speedSelect {
+        font-size: 10px;
+        padding: 0 3px;
+    }
+}
+
+@media (max-width: 410px) {
+    .Time {
+        font-size: 10px;
+    }
+
+    #volumeSlider {
+        height: 6px;
+    }
+
+    #volumeSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: none;
+    }
+}
+
+@media (max-width: 405px) {
+    #volumeSlider {
+        width: 52px;
+    }
+
+    #playPauseBtn {
+        min-width: 30px;
+        min-height: 30px;
+    }
+}
+
+@media (max-width: 387px) {
+    .center-play-btn {
+        width: 45px;
+        height: 45px;
+        margin: -26px 0 0 -26px;
+    }
+
+    .center-play-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    #speedSelect {
+        font-size: 9px;
+        padding: 0 1px;
+    }
+}
+
+@media (max-width: 383px) {
+    #volumeSlider {
+        display: none;
+    }
+}
+
 /* Small phones */
 @media (max-width: 380px) {
     body {
@@ -537,11 +724,7 @@ button svg {
         width: 46px;
     }
 
-    #speedSelect {
-        min-height: 30px;
-        padding: 0 4px;
-        font-size: 11px;
-    }
+    #speedSelect {}
 
     button {
         min-width: 30px;
@@ -550,8 +733,8 @@ button svg {
     }
 
     #playPauseBtn {
-        min-width: 38px;
-        min-height: 38px;
+        min-width: 32px;
+        min-height: 32px;
     }
 
     .Time {

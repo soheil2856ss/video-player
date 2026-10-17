@@ -1,5 +1,6 @@
 const videoContainer = document.querySelector('.video-container'),
     boxVideo = document.querySelector('.box-video'),
+    boxFile = document.querySelector('.box-file'),
     myVideo = document.getElementById("myVideo"),
     progressBar = document.getElementById("progressBar"),
     progressFilled = document.getElementById("progressFilled"),
@@ -14,7 +15,24 @@ const videoContainer = document.querySelector('.video-container'),
     fullscreenBtn = document.getElementById("fullscreenBtn"),
     pipBtn = document.getElementById("pipBtn"),
     loadingSpinner = document.getElementById("loadingSpinner"),
-    centerPlayBtn = document.getElementById("centerPlayBtn");
+    centerPlayBtn = document.getElementById("centerPlayBtn"),
+    EnterFileBtn = document.querySelector(".enter-file"),
+    videoInput = document.getElementById("videoInput");
+
+EnterFileBtn.addEventListener("click", () => {videoInput.click();});
+
+videoInput.addEventListener("change", () => {
+    const file = videoInput.files[0];
+
+    if (file) {
+        boxFile.style.display = "none";
+        boxVideo.style.display = "block";
+        myVideo.src = URL.createObjectURL(file);
+        myVideo.load();
+        myVideo.pause();
+        previewVideo.src = URL.createObjectURL(file);
+    }
+});
 
 let hideControlsTimer;
 

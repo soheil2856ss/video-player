@@ -16,6 +16,12 @@
     --muted: #94a3b8;
 }
 
+@font-face {
+    font-family: "vazir";
+    src: url("fonts/Vazirmatn-Regular.ttf") format("truetype"),
+    url("fonts/Vazirmatn-Regular.woff2") format("woff2");
+}
+
 /* ---------- Page ---------- */
 body {
     min-height: 100vh;
@@ -43,11 +49,41 @@ body {
 
 /* ---------- Video ---------- */
 .box-video {
+    display: none;
     position: relative;
     overflow: hidden;
     border-radius: 16px;
     background: #000;
     isolation: isolate;
+}
+
+.box-file {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: column;
+    background-color: rgba(27, 38, 58, 0.85);
+    border-radius: 16px;
+    font-family: "vazir";
+    padding: 2rem 0;
+}
+
+.box-file #clapperboard {
+    width: 3rem;
+    height: 3rem;
+}
+
+.enter-file {
+    font-family: "vazir";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#videoInput {
+    display: none;
 }
 
 #myVideo {

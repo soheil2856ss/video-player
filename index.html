@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Video</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="./8400849-middle.png">
 </head>
 <body>
 <div class="video-container">
+    <div class="box-file" dir="rtl">
+        <i data-lucide="clapperboard" id="clapperboard"></i>
+        <h2>ویدئوت رو انتخاب کن</h2>
+        <p>فایل MP4 یا WebM خودت رو باز کن</p>
+        <button class="enter-file"><i data-lucide="folder-open"></i> انتخاب ویدئو</button>
+        <input type="file" id="videoInput" accept="video/*">
+    </div>
     <div class="box-video">
-        <video id="myVideo" src="./BigBuckBunny_320x180.mp4" preload="metadata"></video>
+        <video id="myVideo" src="" preload="metadata"></video>
         <div class="loading-spinner" id="loadingSpinner"></div>
         <button class="center-play-btn" id="centerPlayBtn" aria-label="Play">
             <i data-lucide="play"></i>
@@ -26,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <video id="previewVideo" src="./BigBuckBunny_320x180.mp4" muted preload="metadata" style="display:none"></video>
+        <video id="previewVideo" src="" muted preload="metadata" style="display:none"></video>
     </div>
     <div class="All-controls">
         <div class="controls-left">
